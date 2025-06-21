@@ -24,7 +24,6 @@ By default, the server runs on port 80.
 - `/name [name]` - Change your display name
 - `/speed [number]` - Change TTS speed
 - `/pitch [number]` - Change TTS pitch
-- `/join [room]` - Join a private room, or whatever.
 - `/joke` - Tell a random joke
 - `/fact` - Share a random fact
 - `/backflip` - Do a backflip
