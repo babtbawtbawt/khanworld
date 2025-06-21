@@ -16,6 +16,7 @@ npm install
 ```bash
 node server.js
 ```
+By default, the server runs on port 80.
 ## Commands
 
 ### Regular Commands
