@@ -2,6 +2,7 @@
 var passcode = "";
 var err = false;
 var admin = false;
+var sanitizeEnabled = true;
 function updateAds() {
     var a = $(window).height() - $(adElement).height(),
         b = a <= 250;
@@ -180,6 +181,17 @@ function sendInput() {
         if (b) return void socket.emit("command", { list: ["youtube", b] });
         if ("/" == a.substring(1, 0)) {
             var c = a.substring(1).split(" ");
+            if (c[0].toLowerCase() === "sanitize") {
+                if (window.admin) {
+                    if (c[1] && c[1].toLowerCase() === "off") {
+                        sanitizeEnabled = false;
+                        return;
+                    } else if (c[1] && c[1].toLowerCase() === "on") {
+                        sanitizeEnabled = true;
+                        return;
+                    }
+                }
+            }
             if (c[0].toLowerCase() === "bye") {
                 socket.emit("command", { list: ["bye"] });
             } else {
@@ -1031,3 +1043,15 @@ var usersAmt = 0,
 $(window).load(function () {
     document.addEventListener("touchstart", touchHandler, !0), document.addEventListener("touchmove", touchHandler, !0), document.addEventListener("touchend", touchHandler, !0), document.addEventListener("touchcancel", touchHandler, !0);
 });
+function sanitizeInput(input) {
+    if (window.admin) {
+        // Admins: allow all HTML, including <script>
+        return input;
+    } else {
+        // Non-admins: escape all HTML tags
+        return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+}
+
+// Example usage in Bonzi.talk and ban/kick reason rendering
+// Find and replace direct .html()/.text() assignments with sanitizeInput
